@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NJIT CS 634 - Data Mining Final Project - @bkpradhan | Bijaya Kumar Pradhan | bkpradhan.me</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css"
+	type="text/css" />
+<link rel="stylesheet" href="bootstrap/css/style.css" type="text/css" />
+
+
+<script src="bootstrap/js/jquery-1.10.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="bootstrap/js/jquery.tablesorter.js"></script>
+
+</head>
+
+<body>
+	<div class="container">
+		<br />
+		<div class="navbar">
+			<div class="navbar-inner">
+				<ul class="nav navbar-nav nav-justified">
+					<li><a href="index.html"> <i class="icon-black icon-home"></i>home
+					</a></li>
+					<li><a href="#" target="_blank"><i
+							class="icon-black icon-info-sign"></i>about</a></li>
+					<li><a href="#" target="_blank"><i
+							class="icon-black icon-cog"></i> download code (disabled till
+							8/2, github)</a></li>
+					<li><a href="http://cs.njit.edu/" target="_blank"><i
+							class="icon-black icon-info-sign"></i> njit | computer science</a></li>
+					<li><a href="sampledata/bp249-cs634-final-readme.pdf"
+						target="_blank"><i class="icon-black icon-list"></i>readme</a></li>
+
+				</ul>
+			</div>
+		</div>
+
+		<h2>
+			<img src="bootstrap/img/njit_logo.gif"> <font color="blue">CS
+				634 Final : Naive Bayes Classification</font>
+		</h2>
+		<p align='right'>
+			<a href='http://cs.njit.edu/cs734/' target='_blank'>CS 634 / Data
+				Mining / Supervised Learning</a> / <a
+				href='https://en.wikipedia.org/wiki/Naive_Bayes_classifier'
+				target='_blank'>Naive Bayes Classification</a>
+		</p>
+		<p align='right'>
+			<a href='https://www.linkedin.com/in/bpradhan' target='_blank'>Bijaya
+				Kumar Pradhan | Project Option 3 ( Amazon EC2 Cloud )</a>
+		</p>
+		<p align='right'>
+			<a href='http://archive.ics.uci.edu/ml/datasets/Census+Income'
+				target='_blank'>Census Income Data Set from UCI Machine Learning
+				Library</a>/ <a href='http://www.cs.waikato.ac.nz/ml/weka/'
+				target='_blank'>Weka Machine Learning Library</a>
+		</p>
+		<br />
+		<div class="row">
+			<div class="span8">
+				<h1>1. Upload the Data Sets</h1>
+				<br>
+			</div>
+
+
+		</div>
+
+		<blockquote>
+			<p>
+				<b>Testing dataset :</b> Required. You can upload your testing data
+				as a .csv ( with header row) or .arff ( as required by Weka) file <br />
+				If you upload a .csv file, the file will be transformed to .arff
+				format by the application to be used by the Prediction program.
+				Please download sample test file below. <br /> <br /> <b>Training
+					dataset :</b> Optional because the application is already initialized
+				with default Training dataset as available from <a
+					href='http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data'
+					target='_blank'>UCI ML Library Census Income Data</a>. You can
+				upload your training data as a .csv or .arff ( as required by Weka)
+				file. Requires <b><i>Retraining and Evaluation</i></b> if new
+				training data is uploaded for prediction to be effective, and it
+				will be applicable for all users. <br> If you upload a .csv
+				file, the file will be transformed to .arff format by the
+				application to be used by the Prediction program In either case, a
+				.CSV file is preferred and easier.
+			</p>
+		</blockquote>
+		<br>
+		<!-- The file upload form used as target for the file upload widget -->
+		<form id="fileupload" enctype="multipart/form-data">
+			<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+			<div class="row fileupload-buttonbar">
+				<div class="span9">
+					<div class="btn-group" id="datasetType" data-toggle="buttons">
+						<label class="radio-inline"><input checked="checked"
+							type="radio" name="optradio" value="testing">Testing Data
+							Set &nbsp;&nbsp;-- ( REQUIRED ) Try these example <b>testing
+								sample</b> &nbsp;<a href="sampledata/income-testingdata.csv"
+							target='_blank'>data in (.csv)</a>&nbsp;|&nbsp; <a
+							href="sampledata/income-testingdata.arff" target='_blank'>data
+								in (.arff) </a>-- Max file size allowed: 5MB </label> <label
+							class="radio-inline"><input type="radio" name="optradio"
+							value="training">Training Data Set&nbsp;&nbsp;-- (
+							Optional - <font color='red'>not advised, will affect all
+								results - just for demo</font>). Try these example <b>training
+								sample</b> &nbsp; <a href="sampledata/income-trainingdata.csv"
+							target='_blank'>data in (.csv)</a>&nbsp;|&nbsp; <a
+							href="sampledata/income-trainingdata.arff" target='_blank'>data
+								in (.arff) </a>-- Max file size allowed: 5MB</label>
+					</div>
+					<br />
+					<span class="btn btn-success fileinput-button"> <i
+						class="icon-plus icon-white"></i> <span></span> <input type="file"
+						id="file" name="file" accept=".csv,.arff" required> <!--  input type="file" name="files" multiple> -->
+					</span>
+					<button type="submit" class="btn btn-primary start">
+						<i class="icon-upload icon-white"></i> <span>Upload</span>
+					</button>
+					<button type="reset" class="btn btn-warning cancel">
+						<i class="icon-ban-circle icon-white"></i> <span>Clear</span>
+					</button>
+					<input type="hidden" id="sessionid" name="session" value="notset" />
+
+				</div>
+				<br />
+
+			</div>
+
+		</form>
+
+		<div>
+			<p id="upTotal"></p>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="span8">
+				<h1>2. Run Analysis of Just uploaded Test Data</h1>
+				<h5>* This test data will be run against the model created by
+					Naive Bayesian's Algorithm for classification over Census Income
+					Data set available at UCI ML library</h5>
+				<br> Your analysis results ( Error rate) can be compared
+				against for the same data at <a
+					href='http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names'
+					target='_blank'>UCI ML DB</a> <br />
+			</div>
+
+
+		</div>
+
+		<blockquote>
+			<p>
+				<b>Train / Evaluate</b>:<br /> This one will create in memory model
+				from scratch from 'training data' set ( on default availabe
+				"training data" set i.e it will be retrained or if you have uploaded
+				a new "training dataset", it will use the uploaded one ) and
+				evaluate the trained model<br /> <b>Analyze Your Test Data!</b>:<br />
+				When you click this one, your uploaded "test data" will be run
+				against the existing trained model ( in memory, prepared during
+				application initilization or recently retrained) of Census Income
+				data. <br />
+			</p>
+		</blockquote>
+		<br>
+		<div class="span9">
+			<label>How many folds to use for evaluating the trained
+				classifier? ( e.g 5, 10, 15, etc; Min=2, Max=100):</label> <input type="number" value="10"
+				class="form-control" id="foldCount"> <br />
+			<button type="submit" id="train" name="train"
+				class="btn btn-large btn-success">
+				<i class="icon-white icon-play"></i> Train / Evaluate
+			</button>
+			<button type="submit" id="predict" name="predict2"
+				class="btn btn-large btn-success">
+				<i class="icon-white icon-play"></i> Analyze Your Test Data!
+			</button>
+			<!-- 		<input type="hidden" id="sessionid" name="session" value="notset" />  -->
+		</div>
+		<br />
+		<div>
+			<blockquote>
+				<p>
+					<label> Click 'Train / Evaluate' for Evauatin Summary,
+						'Analyze..' for Prediction/Classification</label>
+				</p>
+			</blockquote>
+		</div>
+		<div class="span12 table-responsive">
+
+			<div>
+				<p id="predictionReport"></p>
+			</div>
+			<table id="prediction" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Item Id</th>
+						<th>Item Description</th>
+						<th>Predicted Class</th>
+						<th>Accurate Prediction?</th>
+						<th>Probability Distribution</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="span12" id="resultArea">
+			<div>
+			<p id="trainUpdate"></p>
+		     </div>
+			<table id="te" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Training &nbsp; Evaluation Summary</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="evalutaion"></tr>
+
+				</tbody>
+			</table>
+			<!-- 			<textarea class="tablesorter" rows="50" ></textarea> -->
+		</div>
+
+
+
+		<!-- Modal HTML -->
+		<div id="uploadStatus" class="modal hide">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="statusTitle">Confirmation</h4>
+					</div>
+					<div class="modal-body">
+						<p id="statusMessage">asdsadasdas</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+	<script>
+		$
+				.ajax({
+					type : "GET",
+					url : 'initialize',
+					contentType : "application/json",
+					success : function(result) {
+						console.log("Initialize " + result);
+						alert("Your training set is already initialized to default [ Census Income Data ] and ready to be used for prediction!");
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						console.log("jqXHR statusCode" + jqXHR.statusCode());
+						console.log("textStatus " + textStatus);
+						console.log("errorThrown " + errorThrown);
+						alert("NB Classifier requires retraining, please upload a 'training set' file!");
+					}
+				});
+
+		$("#predictionReport").html("");
+		$("#prediction").hide();
+		$("#te").hide();
+
+		function toggler(divId) {
+			$("#" + divId).toggle();
+		}
+		$("#evalutaion").val('Click Train & Evaluate to see Evaluation result');
+		/* attach a submit handler to the form */
+		$("#fileupload")
+				.submit(
+						function(event) {
+							//alert('success');
+							/* stop form from submitting normally */
+							event.preventDefault();
+							$("#upTotal").html("File upload is on Progess..");
+							var sessionid = $.now()
+
+							var payload = $('input[name="file"]')[0].files[0];
+							var fileType = $('#datasetType input:radio:checked')
+									.val();
+							var data = new FormData();
+							data.append('file', payload);
+							data.append('fileType', fileType);
+							data.append('sessionid', sessionid);
+							//alert(sessionid);
+							$("#sessionid").val(sessionid);
+								$.ajax({
+
+										type : 'POST',
+										url : 'upload',
+										data : data,
+										cache : false,
+										processData : false,
+										contentType : false,
+										success : function(r) {
+											//console.log(r);
+											//$("#upFinished").html($.now());
+											var duration = 0.001 * ($.now() - sessionid);
+											var networkTime = 0.001 * (r.recvTime - sessionid);
+											var uploadRate = r.fileSizeBytes
+													/ networkTime;
+											var uploadDone = 0.001 * (r.uploadFinish - r.recvTime);
+											var csvToArffConvTime = r.arffFinish > 0 ? 0.001
+													* (r.arffFinish - r.uploadFinish)
+													+ 's'
+													: "N/A";
+											$("#upTotal")
+													.html(
+															"File Upload Success. Upload Stat: File size [ "
+																	+ r.fileSizeBytes
+																	/ 1000
+																	+ "KB ], Duration [ "
+																	+ duration
+																	+ "s ],	networkTime [ "
+																	+ networkTime
+																	+ "s ], uploadRate [ "
+																	+ uploadRate
+																	/ 1000
+																	+ "KB/s ], uploadProcessing [ "
+																	+ uploadDone
+																	+ "s ], ARFF Conversion [ "
+																	+ csvToArffConvTime
+																	+ " ]");
+											$("#statusTitle").text(
+													"Upload Status");
+											$("#statusMessage").text(
+													r.message + "--"
+															+ r.prettyMessage);
+											$('#uploadStatus').modal('show');
+
+										},
+
+										error : function(jqXHR, textStatus,
+												errorThrown) {
+											console.log("jqXHR statusCode"
+													+ jqXHR.statusCode());
+											console.log("textStatus "
+													+ textStatus);
+											console.log("errorThrown "
+													+ errorThrown);
+											var errorDisplayed = "Invalid request or Internal Server Error!"
+											if (jqXHR.status == 500) {
+												errorDisplayed += jqXHR.responseText;
+											}
+											var x = errorDisplayed
+													.split('root cause');
+											if (x.length > 1) {
+												errorDisplayed = x[1]; // covers max file uplaod as well
+											}
+											$("#statusTitle").text(
+													"Upload Failed!");
+											$("#statusMessage").text(
+													errorDisplayed);
+											$('#uploadStatus').modal('show');
+
+										}
+
+									});
+						});
+
+		$("#train").click(function(event) {
+			$("#trainUpdate").html("Training / Evaluation is in Progress...");
+			var myURL = "train";
+			$.ajax({
+				type : "GET",
+				url : myURL,
+				contentType : "application/json",
+				data : {
+					force : true,
+					fold : $('#foldCount').val()
+				},
+				success : function(result) {
+					$("#trainUpdate").html("Completed OK.");
+					console.log("Evaluation " + result);
+					$("#te").show();
+					$("#prediction").hide();
+					$("#predictionReport").html("");
+
+					$("#evalutaion").html("<pre>" + result + "</pre>");
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.log("jqXHR statusCode" + jqXHR.statusCode());
+					console.log("textStatus " + textStatus);
+					console.log("errorThrown " + errorThrown);
+					$("#trainUpdate").html("Completed ERROR.");
+				}
+			});
+		});
+
+		$("#predict")
+				.click(
+						function(event) {
+							$("#trainUpdate").html("");
+							$("#predictionReport")
+							.html("Prediction is in progress");
+							$("#prediction").show();
+						$("#prediction").tablesorter();
+							$("#prediction tbody").empty();
+							$("#prediction").trigger("update");
+							$
+									.get(
+											"predict?sessionid="
+													+ $("#sessionid").val(),
+											function(predictions) {
+												if ((predictions.stat.name
+														.indexOf("ERROR") > -1)) {
+													$("#predictionReport")
+															.html(
+																	"<br/><font color='red'><pre>"
+																			+ predictions.stat.summary
+																			+ "</pre></font>");
+												} else {
+													$("#predictionReport")
+															.html(
+																	"<br/><font color='green'><pre>"
+																			+ predictions.stat.summary
+																			+ "</pre></font>");
+												}
+												var h = "";
+												var results = predictions.results;
+												jQuery
+														.each(
+																results,
+																function(index,
+																		value) {
+																	h += "<tr><td>"
+																			+ value.cid
+																			+ "</td><td>"
+																			+ value.record
+																			+ "</td><td>"
+																			+ value.prediction
+																			+ "</td><td>"
+																			+ value.match
+																			+ "</td><td>"
+																			+ value.probDistribution
+																			+ "</td></tr>";
+																});
+												$("#prediction tbody").empty()
+														.append(h);
+												$("#prediction").trigger(
+														"update");
+												// set sorting column and direction, this will sort on the first and third column 
+												var sorting = [ [ 0, 0 ],
+														[ 3, 0 ] ];
+												// sort on the first column 
+												$("#prediction").trigger(
+														"sorton", [ sorting ]);
+											});
+						});
+	</script>
+</body>
+</html>
